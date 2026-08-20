@@ -1,0 +1,12 @@
+# Two organizer accounts -- real, logged-in Users, per the app's own
+# "only organizers get accounts" rule. password_digest is generated
+# with the same bcrypt hashing has_secure_password uses at runtime, so
+# these fixtures behave exactly like a real signed-up user for tests
+# that actually authenticate (see test/integration/organizer_authentication_test.rb).
+organizer_one:
+  email_address: organizer1@example.com
+  password_digest: <%= BCrypt::Password.create("password123") %>
+
+organizer_two:
+  email_address: organizer2@example.com
+  password_digest: <%= BCrypt::Password.create("password123") %>

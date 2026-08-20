@@ -1,0 +1,23 @@
+# One event in each lifecycle stage, so tests can exercise "hasn't
+# started yet," "live and joinable," and "over" without every test
+# having to build its own event from scratch.
+created_event:
+  name: Not Started Yet
+  slug: created-test-slug
+  status: created
+  user: organizer_one
+
+active_event:
+  name: Live Test Event
+  slug: active-test-slug
+  status: active
+  user: organizer_one
+  started_at: <%= 1.hour.ago %>
+
+ended_event:
+  name: Finished Event
+  slug: ended-test-slug
+  status: ended
+  user: organizer_two
+  started_at: <%= 3.hours.ago %>
+  ended_at: <%= 1.hour.ago %>

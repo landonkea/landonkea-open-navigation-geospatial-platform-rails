@@ -1,0 +1,23 @@
+# Async adapter only works within the same process, so for manually triggering cable updates from a console,
+# and seeing results in the browser, you must do so from the web console (running inside the dev process),
+# not a terminal started via bin/rails console! Add "console" to any action or any ERB template view
+# to make the web console appear.
+development:
+  adapter: async
+
+# The "test" adapter is right for unit-level channel tests (see
+# test/channels/event_channel_test.rb), but our one system test drives
+# a REAL browser over a REAL websocket connection to prove a broadcast
+# actually reaches another connected screen, so it needs an adapter
+# that really delivers messages, not a stub -- "async" (the same one
+# development uses) does exactly that within a single test process.
+test:
+  adapter: async
+
+production:
+  adapter: solid_cable
+  connects_to:
+    database:
+      writing: cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day

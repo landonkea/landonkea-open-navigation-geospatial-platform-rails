@@ -1,0 +1,14 @@
+# One rider and one spectator already in the live test event, so tests
+# don't each have to join a fresh participant from scratch.
+rider_one:
+  event: active_event
+  is_spectator: false
+  lat: 33.4152
+  lng: -111.8315
+  accuracy_m: 10.0
+  last_seen_at: <%= 30.seconds.ago %>
+  last_moved_at: <%= 30.seconds.ago %>
+
+spectator_one:
+  event: active_event
+  is_spectator: true

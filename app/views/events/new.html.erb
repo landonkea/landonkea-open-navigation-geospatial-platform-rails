@@ -1,0 +1,25 @@
+<% content_for :title, "New event" %>
+
+<div class="max-w-lg mx-auto">
+  <h1 class="font-bold text-3xl mb-6">New event</h1>
+
+  <%= form_with model: @event, class: "space-y-5" do |form| %>
+    <% if @event.errors.any? %>
+      <div class="bg-red-50 text-red-700 rounded-lg p-3 text-sm">
+        <ul class="list-disc list-inside">
+          <% @event.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :name, "Event name", class: "block text-sm font-medium mb-1" %>
+      <%= form.text_field :name, autofocus: true, placeholder: "Saturday Morning Loop",
+            class: "block shadow-sm rounded-md border border-gray-300 px-3 py-2 w-full" %>
+    </div>
+
+    <%= form.submit "Create event", class: "rounded-md px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white font-medium cursor-pointer" %>
+  <% end %>
+</div>

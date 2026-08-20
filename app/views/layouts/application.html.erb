@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Open Navigation & Geospatial Platform" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Open Navigation & Geospatial Platform">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%# Matches the brand color from the original app's manifest.json, %>
+    <%# shows up as the browser chrome color on Android/iOS when installed. %>
+    <meta name="theme-color" content="#ff7e1f">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Makes the app installable to a phone's home screen, same as the original PWA. %>
+    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen bg-white text-gray-900">
+    <header class="border-b border-gray-200 px-5 py-3 flex items-center justify-between">
+      <%= link_to "Open Navigation & Geospatial Platform", root_path, class: "font-semibold text-lg" %>
+      <nav class="text-sm">
+        <% if authenticated? %>
+          <%= link_to "My events", events_path, class: "mr-4 text-gray-700 hover:underline" %>
+          <%= button_to "Sign out", session_path, method: :delete, class: "text-gray-700 hover:underline bg-transparent border-none p-0 cursor-pointer" %>
+        <% else %>
+          <%= link_to "Organizer sign in", new_session_path, class: "text-gray-700 hover:underline" %>
+        <% end %>
+      </nav>
+    </header>
+
+    <main class="<%= content_for?(:full_bleed) ? "" : "container mx-auto mt-10 px-5" %>">
+      <%= yield %>
+    </main>
+  </body>
+</html>

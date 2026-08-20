@@ -1,0 +1,39 @@
+<%# The live "who's here" list -- rendered on first page load, and %>
+<%# re-rendered from scratch every time Participant#broadcast_roster_update %>
+<%# fires (see app/models/participant.rb), which is what makes this list %>
+<%# update on every connected screen in real time with no page reload. %>
+<%# %>
+<%# The id lives on THIS div, not on a wrapper in the parent view: Turbo's %>
+<%# "replace" action swaps out the entire element matching the target id, %>
+<%# id included, so if the id only existed on a wrapper one level up, the %>
+<%# very first live update would replace it away and every update after %>
+<%# that would have nothing left to find. Carrying the id here means each %>
+<%# replacement still has it, so the next update can still find its target. %>
+<div id="roster">
+  <% if participants.empty? %>
+    <p class="text-gray-500 text-sm">Nobody has joined yet.</p>
+  <% else %>
+    <ul class="divide-y divide-gray-200 border border-gray-200 rounded-lg overflow-hidden">
+      <% participants.each do |participant| %>
+        <li class="p-3 flex items-center justify-between text-sm">
+          <div class="flex items-center gap-2">
+            <%# A small colored dot standing in for this participant's map marker color, %>
+            <%# falling back to a neutral gray for anyone who didn't pick one. %>
+            <span class="inline-block w-3 h-3 rounded-full" style="background-color: <%= participant.color.presence || "#9ca3af" %>"></span>
+            <span class="font-medium">Participant #<%= participant.id %></span>
+            <% if participant.tag.present? %>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600"><%= participant.tag %></span>
+            <% end %>
+            <% if participant.is_spectator? %>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">watching only</span>
+            <% end %>
+          </div>
+          <span class="text-xs px-2 py-0.5 rounded-full
+            <%= { "green" => "bg-green-100 text-green-700", "yellow" => "bg-yellow-100 text-yellow-700", "red" => "bg-red-100 text-red-700" }[participant.signal_status] %>">
+            <%= participant.signal_status %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

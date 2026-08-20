@@ -1,0 +1,8 @@
+# A single past trail point for rider_one, just enough to exercise the
+# Position model's own validations and associations.
+rider_one_sample:
+  participant: rider_one
+  event: active_event
+  lat: 33.41
+  lng: -111.83
+  recorded_at: <%= 5.minutes.ago %>

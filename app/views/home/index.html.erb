@@ -1,0 +1,27 @@
+<% content_for :title, "Open Navigation & Geospatial Platform" %>
+
+<div class="max-w-2xl mx-auto">
+  <% if alert = flash[:alert] %>
+    <p class="py-2 px-3 bg-red-50 mb-5 text-red-600 font-medium rounded-lg"><%= alert %></p>
+  <% end %>
+
+  <h1 class="font-bold text-3xl mb-3">See a group's live location on one shared map.</h1>
+  <p class="text-gray-600 mb-8">
+    An organizer starts an event and shares one link. Anyone with that link can watch the
+    live map instantly, no account needed, and can choose to share their own position too.
+  </p>
+
+  <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
+    <h2 class="font-semibold text-lg mb-3">Have a join code?</h2>
+    <%= form_with url: find_event_path, method: :post, class: "flex gap-2" do |form| %>
+      <%= form.text_field :slug, placeholder: "e.g. 08202026", required: true,
+            class: "flex-1 block shadow-sm rounded-md border border-gray-300 px-3 py-2" %>
+      <%= form.submit "Go", class: "rounded-md px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white font-medium cursor-pointer" %>
+    <% end %>
+  </div>
+
+  <p class="text-sm text-gray-500">
+    Running an event yourself? <%= link_to "Sign in as an organizer", new_session_path, class: "text-orange-700 underline" %>
+    to create one.
+  </p>
+</div>

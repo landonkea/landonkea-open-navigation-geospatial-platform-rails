@@ -1,0 +1,46 @@
+<% content_for :title, @event.name %>
+
+<div class="max-w-3xl mx-auto">
+  <% if notice = flash[:notice] %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-lg"><%= notice %></p>
+  <% end %>
+
+  <div class="flex items-center justify-between mb-2">
+    <h1 class="font-bold text-3xl"><%= @event.name %></h1>
+    <span class="text-xs uppercase tracking-wide px-2 py-1 rounded-full
+      <%= @event.status == "active" ? "bg-green-100 text-green-700" : @event.status == "ended" ? "bg-gray-100 text-gray-500" : "bg-yellow-100 text-yellow-700" %>">
+      <%= @event.status %>
+    </span>
+  </div>
+
+  <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+    <p class="text-sm text-gray-500 mb-1">Join link -- share this with your group</p>
+    <div class="flex items-center gap-2">
+      <code class="text-sm bg-white border border-gray-200 rounded px-2 py-1 flex-1 overflow-x-auto"><%= event_map_url(@event) %></code>
+    </div>
+    <p class="text-xs text-gray-400 mt-2">Join code: <span class="font-mono"><%= @event.slug %></span></p>
+  </div>
+
+  <div class="flex gap-3 mb-8">
+    <% if @event.status == "created" %>
+      <%= button_to "Start event", start_event_path(@event), method: :post,
+            class: "rounded-md px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white font-medium cursor-pointer" %>
+    <% elsif @event.status == "active" %>
+      <%= button_to "End event", finish_event_path(@event), method: :post,
+            data: { turbo_confirm: "End this event? People will be disconnected from live sharing." },
+            class: "rounded-md px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-medium cursor-pointer" %>
+      <%= link_to "View live map", event_map_path(@event),
+            class: "rounded-md px-4 py-2 border border-gray-300 hover:bg-gray-50 font-medium" %>
+    <% else %>
+      <%= link_to "View map", event_map_path(@event),
+            class: "rounded-md px-4 py-2 border border-gray-300 hover:bg-gray-50 font-medium" %>
+    <% end %>
+  </div>
+
+  <h2 class="font-semibold text-lg mb-3">Who's here (<%= @participants.size %>)</h2>
+  <%# turbo_stream_from opens a websocket subscription (over Solid Cable) %>
+  <%# to this exact broadcast name -- the same name Participant#broadcast_roster_update %>
+  <%# targets, so this list updates live the moment anyone joins or moves. %>
+  <%= turbo_stream_from @event, :roster %>
+  <%= render "roster", participants: @participants %>
+</div>
